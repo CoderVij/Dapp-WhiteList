@@ -5,6 +5,7 @@ import Web3Modal from "web3modal";
 import {providers, Contract} from "ethers";
 import {useEffect, useRef, useState} from "react";
 import {WHITELIST_CONTRACT_ADDRESS, abi} from "../constants";
+import { network } from 'hardhat';
 
 export default function Home() {
 
@@ -130,4 +131,82 @@ export default function Home() {
         console.log(error);
       }
     }
+
+
+    const renderButton = () =>
+    {
+      if(walletConnected)
+      {
+        //joined the whitelist
+        if(joinedWhiteList)
+        {
+          return(
+            <div className={styles.description}> Thanks for joining the whitelist</div>
+          );
+        }
+        else if(loading)
+        {
+          return(
+            <button className={styles.button}>Loading...</button>
+          );
+        }
+        else{
+          return(
+            <button onClick={addAddressToWhiteList} className={styles.button}>
+              Join the whitelist
+            </button>
+          );
+        }
+      }
+      else{
+        return(
+          <button onClick={connectWallet} className={styles.button}>Connect yout Wallet</button>
+        );
+      }
+    }
+
+
+    useEffect(() => 
+    {
+      if(!walletConnected)
+      {
+        web3ModalRef.current = new Web3Modal(
+          {
+          network:"goerli",
+          providerOptions:{},
+          disableInjectedProvider: false
+        });
+        connectWallet();
+      }
+    } , [walletConnected]);
+
+
+    return (
+        <div>
+        <Head>
+          <title>Whitelist Dapp</title>
+          <meta name="description" content="Whitelist-Dapp" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className={styles.main}>
+          <div>
+            <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
+            <div className={styles.description}>
+              Its an NFT collection for developers in Crypto.
+            </div>
+            <div className={styles.description}>
+              {numberOfWhiteListed} have already joined the Whitelist
+            </div>
+            {renderButton()}
+          </div>
+          <div>
+            <img className={styles.image} src="./crypto-devs.svg" />
+          </div>
+        </div>
+
+        <footer className={styles.footer}>
+          Made with &#10084; by Crypto Devs
+        </footer>
+      </div>
+    );
 }
