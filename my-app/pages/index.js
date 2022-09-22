@@ -112,7 +112,7 @@ export default function Home() {
        {
         console.log(err);
        }
-    }
+    };
 
 
     const connectWallet = async () =>
@@ -130,7 +130,7 @@ export default function Home() {
       {
         console.log(error);
       }
-    }
+    };
 
 
     const renderButton = () =>
@@ -163,7 +163,7 @@ export default function Home() {
           <button onClick={connectWallet} className={styles.button}>Connect yout Wallet</button>
         );
       }
-    }
+    };
 
 
     useEffect(() => 
