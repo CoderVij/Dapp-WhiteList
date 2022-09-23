@@ -4,24 +4,27 @@ pragma solidity ^0.8.17;
 
 contract WhiteList
 {
-    uint8 public maxWhiteListAddressAllowed;
 
-    mapping(address => bool) public whiteListedAddress;
+    uint8 public maxWhitelistedAddresses;
+
+    mapping(address => bool) public whitelistedAddresses;
 
     uint8 public numAddressesWhitelisted;
 
-    constructor(uint8 _maxWhiteListAddressAllowed)
-    {
-        maxWhiteListAddressAllowed = _maxWhiteListAddressAllowed;
+
+    constructor(uint8 _maxWhitelistedAddresses) {
+        maxWhitelistedAddresses =  _maxWhitelistedAddresses;
     }
 
 
-    function addAddressToWhiteList() public
-    {
+    function addAddressToWhitelist() public {
+      
+        require(!whitelistedAddresses[msg.sender], "Sender has already been whitelisted");
 
-        require(!whiteListedAddress[msg.sender], "Address is already whitelisted");
-        require(maxWhiteListAddressAllowed > numAddressesWhitelisted, "More address can't be listed");
-        whiteListedAddress[msg.sender] = true;
+        require(numAddressesWhitelisted < maxWhitelistedAddresses, "More addresses cant be added, limit reached");
+
+        whitelistedAddresses[msg.sender] = true;
+ 
         numAddressesWhitelisted += 1;
     }
 }
